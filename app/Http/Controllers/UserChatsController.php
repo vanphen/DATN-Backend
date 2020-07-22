@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Http\Controllers;
+use App;
+use App\UserChats;
+use App\Zoom;
+use App\Message;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+
+class UserChatsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $zooms = App\Zoom::all();
+        $listZoom = [];
+        foreach($zooms as $zoom) {
+           $listZoom[] = $zoom->id;
+        }
+        return view('user.chat', [
+            'rooms' => $listZoom ,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\UserChats  $userChats
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        $zooms = App\Zoom::find($id)->message;
+        $listArrayChat = $zooms->where('zoom_id', $id);
+        return json_encode($listArrayChat);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\UserChats  $userChats
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(UserChats $userChats)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\UserChats  $userChats
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, UserChats $userChats)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\UserChats  $userChats
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(UserChats $userChats)
+    {
+        //
+    }
+
+    public function getInforActivity(Request $request, $id) {
+        $message = Message::where('user_id', $id)->get();
+        $room = Zoom::all();
+        $numberCustomer = [];
+        foreach($message as $key) {
+            $numberCustomer[] = $key->zoom_id;
+        }
+        $countMessage = count($message);
+        return json_encode([
+            'countMessage' => $countMessage,
+            'numberCustomer' => count(array_unique($numberCustomer)),
+            'numberZoom' => count($room),
+        ]);
+    }
+
+}

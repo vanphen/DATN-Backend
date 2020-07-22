@@ -1,0 +1,78 @@
+body, html {
+    height: 100%;
+    background-image: url("https://pixinvent.com/demo/vuexy-vuejs-laravel-admin-template/demo-2/images/vuexy-login-bg.jpg?04351a33eb1f49873e982c8b025d5718");
+    /* Full height */
+    height: 100%;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Montserrat,Helvetica,Arial,sans-serif !important;
+}
+.logo-img{
+
+    position: absolute;
+    width: 100%;
+    height: 600px;
+    top: 100px;
+    background: #c2c6dc!important;
+    box-sizing: border-box;
+
+}
+.img-background{
+    margin-top: 37%;
+    margin-left: 5%;
+}
+
+
+.input-login {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: #262c49;
+    padding: .7rem 1rem .7rem 1rem!important;
+    font-size: 1rem!important;
+    color: #c2c6dc;
+    font-weight: 400;
+    border-radius: 5px;
+    width: 100%;
+}
+
+input.button-click:hover {
+    background:#4a73b1;
+}
+    /* .logo-img{ */
+    /* background: #edf0ff!important; */
+.login {
+    background: #10163a !important;
+    position: absolute;
+    width: 100%;
+    height: 600px;
+    top: 100px;
+    box-sizing: border-box;
+}
+.form-login{
+    color : #FFFFFF;
+    padding: 2rem 2rem 0 2rem;
+}
+/* color: #edf0ff!important; */
+/* .input-login { */
+
+.button-click{
+    padding: .679rem 2rem;
+    border: 1px solid rgba(var(--vs-primary),1);
+    background: #7367F0;
+    color: aliceblue;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+input.button-click:hover {
+    background:#4a73b1;
+}
+
+.navMenu {
+    background: #FFF;
+    border-radius: 5px;
+    padding: 10px 15px;
+    width: 52px;
+    margin-left: 25px;
+    margin-top: 20px;
+}
