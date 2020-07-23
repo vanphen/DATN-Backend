@@ -192,7 +192,7 @@
 @section('jsScript')
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        var socket = io.connect("http://18.183.157.67:9000/")
+        var socket = io.connect("http://18.183.81.183:9000/")
     </script>
     <script scope src="{{ asset('chat/chat.js') }}"> </script>
 @endsection
