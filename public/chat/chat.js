@@ -194,6 +194,7 @@ $(document).ready(function () {
 					.then(function (mediaStream) {
 						var video = document.querySelector('video#myVideo');
 						video.srcObject = mediaStream;
+						yourConn.addStream(mediaStream);
 						video.onloadedmetadata = function (e) {
 							video.play();
 						};
@@ -252,7 +253,7 @@ $(document).ready(function () {
 						 'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', 
 						 'username': '28224511:1379330808' 
 						} 
-					] 
+					]
 				};
 
 				yourConn = new webkitRTCPeerConnection(configuration); 
