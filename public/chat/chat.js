@@ -268,7 +268,7 @@ $(document).ready(function () {
 				// //when a remote user adds stream to the peer connection, we display it 
 				yourConn.onaddstream = function(event) {
 					remoteVideo.srcObject = event.stream;
-					remoteAudio.srcObject = event.stream;
+					// remoteAudio.srcObject = event.stream;
 				}
 				// // Setup ice handling
 				yourConn.onicecandidate = function (event) {
