@@ -136,7 +136,7 @@
         let listrooms  = Object.values(listRooms);
         if (username === 'Disconnected') {
             delete listRooms[idConnect];
-            $('#'+idConnect).remove();
+            $('.'+idConnect).remove();
         }
         $('.numberCustomerActivity').text(listrooms.length);
         if (listrooms.length != 0) {
