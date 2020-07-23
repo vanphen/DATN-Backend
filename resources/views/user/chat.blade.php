@@ -111,12 +111,12 @@
         <div class="col-md-1"></div>
         <div class="col-md-5">
             <h2 style="color:white">Video Của Bạn</h2>
-            <video id='myVideo' style="border-radius: 10px;" width="100%" height="100%" controls autoplay> </video>
+            <video id='myVideo' muted="muted" style="border-radius: 10px;" width="100%" height="100%" controls autoplay> </video>
             <audio id = "localAudio"  autoplay></audio>
         </div>
         <div class="col-md-5">
             <h2 style="color:white">Video Khách hàng</h2>
-            <video id='videoOnline' style="border-radius: 10px;" width="100%" height="100%" controls autoplay> </video>
+            <video id='videoOnline' muted="muted" style="border-radius: 10px;" width="100%" height="100%" controls autoplay> </video>
             <audio id = "remoteAudio"  autoplay></audio> 
         </div>
         <div class="col-md-1"></div>
