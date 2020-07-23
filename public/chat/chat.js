@@ -225,7 +225,7 @@ $(document).ready(function () {
 		if (hasUserMedia()) {
 			var constraints = {
 				video: true,
-				audio: true,
+				audio: false,
 			};
 			navigator.webkitGetUserMedia(constraints, function (mediaStream) {
 				stream = mediaStream;
