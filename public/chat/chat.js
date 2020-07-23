@@ -170,6 +170,7 @@ $(document).ready(function () {
 		tracks.forEach(function(track) {
 			track.stop();
 		});
+		remoteAudio.src = null; 
 		console.log(stream);
 		yourConn.close(); 
 		yourConn.onicecandidate = null; 
@@ -225,13 +226,16 @@ $(document).ready(function () {
 		if (hasUserMedia()) {
 			var constraints = {
 				video: true,
-				audio: false,
+				audio: true,
 			};
 			navigator.webkitGetUserMedia(constraints, function (mediaStream) {
 				stream = mediaStream;
 				var video = document.querySelector('video#myVideo');
 				var remoteVideo = document.querySelector('video#videoOnline')
+				var localAudio = document.querySelector('#localAudio'); 
+				var remoteAudio = document.querySelector('#remoteAudio'); 
 				video.srcObject = stream;
+				localAudio.srcObject = stream;
 				video.onloadedmetadata = function (e) {
 					video.play();
 				};
@@ -264,6 +268,7 @@ $(document).ready(function () {
 				// //when a remote user adds stream to the peer connection, we display it 
 				yourConn.onaddstream = function(event) {
 					remoteVideo.srcObject = event.stream;
+					remoteAudio.srcObject = event.stream;
 				}
 				// // Setup ice handling
 				yourConn.onicecandidate = function (event) {
