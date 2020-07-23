@@ -127,7 +127,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
     <script>
-        var socket = io.connect("http://18.178.242.31:9000/")
+        var socket = io.connect("http://localhost:9000/")
     </script>
     <script>
     socket.on('thong_bao_employee', function(username, idConnect, nameZoom) {

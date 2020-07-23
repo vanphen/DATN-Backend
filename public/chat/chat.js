@@ -31,7 +31,7 @@ $(document).ready(function () {
 				var currentDate = new Date(listMessage[message]['created_at']);
 				var currentDatechat = currentDate.getHours() + ':' + currentDate.getMinutes();
 				var ampm = currentDate.getHours() >= 12 ? 'PM' : 'AM';
-				if (!listMessage[message]['user_id']) {
+				if (listMessage[message]['user_id'] == 3) {
 					$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+listMessage[message]['content']+'.</div> </div>  </div>');
 				} else {
 					$('.chat-area-main').append('<div class="chat-msg owner"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+listMessage[message]['content']+'.</div> </div>  </div>');
@@ -71,7 +71,7 @@ $(document).ready(function () {
 
     socket.on('my_message', function(object_message) {
 		let new_message = JSON.parse(object_message);
-        if (!new_message.userID) {
+        if (new_message.userID == 3) {
 			var currentDate = new Date();
 			var currentDatechat = currentDate.getHours() + ':' + currentDate.getMinutes();
 			var ampm = currentDate.getHours() >= 12 ? 'PM' : 'AM';
@@ -132,7 +132,7 @@ $(document).ready(function () {
 	socket.on('new_call', function(new_call) {
 		let anser_call = JSON.parse(new_call);
 		// let anser_call = new_call;
-		if (!anser_call.userID) {
+		if (anser_call.userID == 3) {
 			if (anser_call.calling) {
 					  // create an offer 
 				loadVideoLocal();
@@ -150,7 +150,7 @@ $(document).ready(function () {
 		send_answer = JSON.parse(object_send_answer);
 		// send_answer = object_send_answer;
 		console.log(send_answer)
-		if (!send_answer.userID) {
+		if (send_answer.userID == 3) {
 		   yourConn.setRemoteDescription(new RTCSessionDescription(send_answer.data)); 
 		}
 	 })
@@ -158,7 +158,7 @@ $(document).ready(function () {
 	socket.on('send_candidate', function(object_send_candidate) {
 		send_candidate = JSON.parse(object_send_candidate);
 		// send_candidate = object_send_candidate;
-		if (!send_candidate.userID) {
+		if (send_candidate.userID == 3) {
 			yourConn.addIceCandidate(new RTCIceCandidate(send_candidate.data));
 		}
 	})
@@ -183,29 +183,29 @@ $(document).ready(function () {
 	// 	// });
 	
 	
-	// 	//shareScreen
-	// 	$('.button-share').click(function () {
-	// 		var displayMediaStreamConstraints = {
-	// 			video: true,
-	// 			audio: true,
-	// 		};
-	// 		if (navigator.mediaDevices.getDisplayMedia) {
-	// 			navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints)
-	// 				.then(function (mediaStream) {
-	// 					var video = document.querySelector('video#myVideo');
-	// 					video.srcObject = mediaStream;
-	// 					video.onloadedmetadata = function (e) {
-	// 						video.play();
-	// 					};
-	// 					$('.toggle-video').css('background', '#fffcfc')
-	// 				})
-	// 				.catch(function (err) {
-	// 					console.log(err.name + ": " + err.message);
-	// 				});
-	// 		} else {
-	// 			navigator.getDisplayMedia(displayMediaStreamConstraints).then(success).catch(error);
-	// 		}
-	// 	});
+		//shareScreen
+		$('.button-share').click(function () {
+			var displayMediaStreamConstraints = {
+				video: true,
+				audio: true,
+			};
+			if (navigator.mediaDevices.getDisplayMedia) {
+				navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints)
+					.then(function (mediaStream) {
+						var video = document.querySelector('video#myVideo');
+						video.srcObject = mediaStream;
+						video.onloadedmetadata = function (e) {
+							video.play();
+						};
+						$('.toggle-video').css('background', '#fffcfc')
+					})
+					.catch(function (err) {
+						console.log(err.name + ": " + err.message);
+					});
+			} else {
+				navigator.getDisplayMedia(displayMediaStreamConstraints).then(success).catch(error);
+			}
+		});
 		
 		
 	

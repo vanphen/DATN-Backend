@@ -110,11 +110,13 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-5">
+            <h2 style="color:white">Video Của Bạn</h2>
             <video id='myVideo' style="border-radius: 10px;" width="100%" height="100%" controls autoplay>
                 <!-- <source src=http://techslides.com/demos/sample-videos/small.mp4 type=video/mp4> -->
             </video>
         </div>
         <div class="col-md-5">
+            <h2 style="color:white">Video Khách hàng</h2>
             <video id='videoOnline' style="border-radius: 10px;" width="100%" height="100%" controls autoplay>
                 <!-- <source src=http://techslides.com/demos/sample-videos/small.mp4 type=video/mp4> -->
             </video>
@@ -190,7 +192,7 @@
 @section('jsScript')
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        var socket = io.connect("http://18.178.242.31:9000/")
+        var socket = io.connect("http://18.183.157.67:9000/")
     </script>
     <script scope src="{{ asset('chat/chat.js') }}"> </script>
 @endsection
