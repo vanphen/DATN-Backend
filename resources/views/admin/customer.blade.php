@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+@extends('layouts.appAdmin')
 @section('css')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -53,6 +52,7 @@
 						<th><?php echo  date("M d Y", strtotime($customer['created_at'])) ?></th>
 						<td>
 							<a href="javascript: void(0)" onclick="updateStatus(<?php echo $customer['id'] ?>)" class="edit"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Edit">done_outline</i></a>
+							<a href="#deleteEmployeeModal" onclick="deleteCustomer(<?php echo $customer['id'] ?>)" class="delete deleteEmployeeModal" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 						</td>
 					</tr>
                     @endforeach
@@ -72,6 +72,27 @@
 			</div> -->
 		</div>
 	</div>        
+</div>
+
+<div id="deleteEmployeeModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form>
+				<div class="modal-header">						
+					<h4 class="modal-title">Xóa khách hàng cần tư vấn</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<p>Bạn có chắc chắn muốn xóa</p>
+					<p class="text-warning"><small>Hành động này sẽ không được hoàn lại</small></p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="button" class="btn btn-danger delete-Customer" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 </div>
 
@@ -98,5 +119,27 @@
 			$('body').LoadingOverlay("hide");
 		});
     }
+    var customerId;
+    function deleteCustomer(id) {
+        customerId = id;
+    }
+    $('.delete-Customer').on('click', function() {
+        $('body').LoadingOverlay("show");
+        axios.delete('/api/customer/destroy/'+customerId)
+        .then(function (response) {
+            if (response.status == 200) {
+                if (response.data['status'] == 'OK'){
+                    $('.customer-'+customerId).remove();
+                    $('#deleteEmployeeModal').modal('hide');
+                }
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .finally(function () {
+            $('body').LoadingOverlay("hide");
+        });
+    })
 </script>
 @endsection

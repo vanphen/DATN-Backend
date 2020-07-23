@@ -125,6 +125,6 @@ class ManageController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        App\User::where('id', $id)->delete();
+        // App\User::where('id', $id)->delete();
     }
 }

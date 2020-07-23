@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Customer;
-use App;
+namespace App\Http\Controllers\SuperAdmin;
+
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
-class CustomerController extends Controller
+use App\Companie;
+
+class ManageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,30 +14,21 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   $customers = [];
-
-        foreach(Customer::all() as $info) {
-            $customers[] = [
-                'id'      => $info->id,
-                'name'    => $info->name,
-                'email'   => $info->email,
-                'phone'   => $info->phone,
-                'address' => $info->address,
-                'ip'      => $info->ip,
-                'message' => $info->message,
-                'status'  => $info->status,
-                'created_at' => $info->created_at,
+    {
+        $companies = [];
+        foreach(Companie::all() as $info) {
+            $companies[] =  [
+                'id'     => $info->id,
+                'name'   => $info->name,
+                'address'  => $info->address,
+                'phone'  => $info->phone,
+                'create' => $info->created_at->format('M d Y'),
+                'update' => $info->updated_at->format('M d Y'),
             ];
         }
-        if (auth()->user()->type == 2) {
-            return view('customer.customer', [
-                'customers' => $customers,
-            ]);
-        } else {
-            return view('admin.customer', [
-                'customers' => $customers,
-            ]);
-        }
+        return view('superadmin.manage', [
+            'companys' => $companies
+        ]);
     }
 
     /**
@@ -89,13 +81,13 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        Customer::where('id', $id)->update([
-            'status' => 1,
-        ]);
-        return json_encode([
-            'status' => 'OK'
+        $company = $request->all()['params'];
+        Companie::where('id', $company['company']['id'])->update([
+            'name' => $company['company']['name'],
+            'address' => $company['company']['address'],
+            'phone' => $company['company']['phone'],
         ]);
     }
 
@@ -107,10 +99,6 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $news= Customer::find($id);
-        $news->delete();
-        return json_encode([
-            'status' => 'OK',
-        ]);
+        Companie::where('id', $id)->delete();
     }
 }

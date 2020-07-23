@@ -32,10 +32,12 @@ Route::prefix('admin')->group(function () {
     Route::get('/', 'HomeController@adminHome')->middleware('is_user');
     Route::get('home', 'HomeController@adminHome')->name('admin.home')->middleware('is_user');
     Route::get('manage', 'Admin\ManageController@index')->name('admin.manage')->middleware('is_user');
+    Route::get('customer', 'CustomerController@index');
 
 });
 
 Route::prefix('superadmin')->group(function () {
-    Route::get('/', 'HomeController@superadmin')->middleware('is_user');
-    Route::get('home', 'HomeController@superadmin')->name('superadmin.home')->middleware('is_user');
+    Route::get('/', 'HomeController@superadmin');
+    Route::get('home', 'HomeController@superadmin')->name('superadmin.home');
+    Route::get('manage', 'SuperAdmin\ManageController@index')->name('superadmin.manage');
 });

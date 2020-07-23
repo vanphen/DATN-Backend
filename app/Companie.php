@@ -7,7 +7,8 @@ use App;
 
 class Companie extends Model
 {
+    protected $table = 'Companies';
     protected $fillable = [
-        'name', 'id'  //add here
+        'name', 'id','address','phone','created_at','updated_at'  //add here
     ];
 }

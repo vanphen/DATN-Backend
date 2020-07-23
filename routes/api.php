@@ -25,3 +25,5 @@ Route::put('/profile/changepassword', 'User\ProfileController@updatePassWord')->
 Route::put('/customer/updateStatus/{id}', 'CustomerController@update')->name('updatestatus');
 Route::delete('/customer/destroy/{id}', 'CustomerController@destroy')->name('delete');
 Route::get('/getActivity/{id}', 'UserChatsController@getInforActivity');
+
+Route::put('/company/update', 'SuperAdmin\ManageController@update');
