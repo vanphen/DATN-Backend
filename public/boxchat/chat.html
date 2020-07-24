@@ -444,7 +444,7 @@ function loadVideoLocal() {
         };
         peerConnect = new webkitRTCPeerConnection(configuration);
         var video = document.querySelector('video#myVideo');
-        var remoteVideo = document.querySelector('#videoOnline')
+        var stream = document.querySelector('#videoOnline')
         var constraints = {
             video: true,
             audio: true,
@@ -459,7 +459,7 @@ function loadVideoLocal() {
 
         peerConnect.onaddstream = function(event) {
             console.log(22222, stream);
-            remoteVideo.srcObject = event.streamVideo;
+            stream.srcObject = event.streamVideo;
         }
         peerConnect.onicecandidate = function(event) {
             if (event.candidate) {
