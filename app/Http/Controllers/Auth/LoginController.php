@@ -57,7 +57,7 @@ class LoginController extends Controller
                 return redirect()->route('superadmin.home');
             }
             else {
-                return redirect()->route('home');
+                return redirect()->route('user.home');
             }
         }else{
             Session::flash('error', 'Email hoặc mật khẩu không chính xác!');

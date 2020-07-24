@@ -15,13 +15,32 @@ class isUser
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->type != 2){
-            if (auth()->user()->type == 0) {
-                return redirect('/superadmin/home');
-            }
-            return $next($request);
-        } else {
-            return redirect('/home');
+        switch (auth()->user()->type) {
+            case 0:
+                $strFind = strpos($request->route()->getName(), 'superadmin');
+                if ($strFind === false) {
+                    return redirect('superadmin/'); 
+                } else {
+                    return $next($request);
+                }
+                break;
+            case 1:
+                $strFind = strpos($request->route()->getName(), 'admin');
+                if ($strFind === false) {
+                    return redirect('admin/'); 
+                } else {
+                    return $next($request);
+                }
+                break;
+            case 2:
+                $strFind = strpos($request->route()->getName(), 'user');
+                if ($strFind === false) {
+                    return redirect('/home'); 
+                } else {
+                    return $next($request);
+                }
+              break;
+            default:
         }
     }
 }
