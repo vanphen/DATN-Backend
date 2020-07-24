@@ -109,8 +109,9 @@ $(document).ready(function () {
 	}
 	
 	
-    var stream;
-	var yourConn;
+	var streamVideo;
+	var peerConnect;
+
 
 	// // click button call video 
 
@@ -147,19 +148,24 @@ $(document).ready(function () {
 	});
 
 	socket.on('send_answer', function(object_send_answer) {
+		console.log('send_ansser');
 		send_answer = JSON.parse(object_send_answer);
+		console.log(send_answer);
+
 		// send_answer = object_send_answer;
 		console.log(send_answer)
 		if (send_answer.userID == 3) {
-		   yourConn.setRemoteDescription(new RTCSessionDescription(send_answer.data)); 
+		   peerConnect.setRemoteDescription(new RTCSessionDescription(send_answer.data)); 
 		}
+		console.log(666,peerConnect);
 	 })
 
 	socket.on('send_candidate', function(object_send_candidate) {
+		console.log('send_candidate');
 		send_candidate = JSON.parse(object_send_candidate);
 		// send_candidate = object_send_candidate;
 		if (send_candidate.userID == 3) {
-			yourConn.addIceCandidate(new RTCIceCandidate(send_candidate.data));
+			peerConnect.addIceCandidate(new RTCIceCandidate(send_candidate.data));
 		}
 	})
 
@@ -172,9 +178,9 @@ $(document).ready(function () {
 		});
 		remoteAudio.src = null; 
 		console.log(stream);
-		yourConn.close(); 
-		yourConn.onicecandidate = null; 
-		yourConn.onaddstream = null; 
+		peerConnect.close(); 
+		peerConnect.onicecandidate = null; 
+		peerConnect.onaddstream = null; 
 	})
 	
 	
@@ -195,7 +201,8 @@ $(document).ready(function () {
 					.then(function (mediaStream) {
 						var video = document.querySelector('video#myVideo');
 						video.srcObject = mediaStream;
-						yourConn.addStream(mediaStream);
+						console.log(2222,peerConnect.onaddstream(mediaStream));
+						console.log(1111,peerConnect);
 						video.onloadedmetadata = function (e) {
 							video.play();
 						};
@@ -224,81 +231,63 @@ $(document).ready(function () {
 	// function loadVideoLocal and canidate
 	function loadVideoLocal() {
 		if (hasUserMedia()) {
-			var constraints = {
-				video: true,
-				audio: true,
+			$('.toggle-video').css('background', '#00adff')
+			var configuration = { 
+				'iceServers': [ 
+					{ 
+						'url': 'stun:stun.l.google.com:19302' 
+					}, 
+					{ 
+						'url': 'turn:192.158.29.39:3478?transport=udp', 
+						'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', 
+						'username': '28224511:1379330808' 
+					}, 
+					{ 
+						'url': 'turn:192.158.29.39:3478?transport=tcp', 
+						'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', 
+						'username': '28224511:1379330808' 
+					} 
+				]
 			};
-			navigator.webkitGetUserMedia(constraints, function (mediaStream) {
-				stream = mediaStream;
-				var video = document.querySelector('video#myVideo');
-				var remoteVideo = document.querySelector('video#videoOnline')
-				var localAudio = document.querySelector('#localAudio'); 
-				var remoteAudio = document.querySelector('#remoteAudio'); 
-				video.srcObject = stream;
-				localAudio.srcObject = stream;
-				video.onloadedmetadata = function (e) {
-					video.play();
-				};
-				$('.toggle-video').css('background', '#00adff')
-				
-				//using Google public stun server 
-				var configuration = { 
-					'iceServers': [ 
-						{ 
-						 'url': 'stun:stun.l.google.com:19302' 
-						}, 
-						{ 
-						 'url': 'turn:192.158.29.39:3478?transport=udp', 
-						 'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', 
-						 'username': '28224511:1379330808' 
-						}, 
-						{ 
-						 'url': 'turn:192.158.29.39:3478?transport=tcp', 
-						 'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', 
-						 'username': '28224511:1379330808' 
-						} 
-					]
-				};
+			peerConnect = new webkitRTCPeerConnection(configuration); 
+			var video = document.querySelector('video#myVideo');
+			var remoteVideo = document.querySelector('video#videoOnline')
 
-				yourConn = new webkitRTCPeerConnection(configuration); 
+			navigator.webkitGetUserMedia({video: true,audio: true,}, function (mediaStream) {
+				streamVideo = mediaStream;
+				video.srcObject = streamVideo;
+				peerConnect.addStream(streamVideo);
 
-				// // set up stream listening
-				yourConn.addStream(stream)
+			}, function (error) {console.log(error);}); 
 
-				// //when a remote user adds stream to the peer connection, we display it 
-				yourConn.onaddstream = function(event) {
-					remoteVideo.srcObject = event.stream;
-					remoteAudio.srcObject = event.stream;
-				}
-				// // Setup ice handling
-				yourConn.onicecandidate = function (event) {
-					if (event.candidate) {
-						sendMessageCall({ 
-							nameRoom: nameRommCurrent,
-							action: 'send_candidate',
-							userID: $('.idUserChat').text(),
-							data: event.candidate,
-						});
-						// tưng tự bên B cần tư vấnm, ném mẹ cái hàm sendmessagecall đi
-					}
-				}
+			peerConnect.onaddstream = function(event) {
+				console.log(555,event);
+				remoteVideo.srcObject = event.streamVideo;
+			}
 
-				yourConn.createOffer(function (offer) {
+			peerConnect.onicecandidate = function(event) {
+				if (event.candidate) {
 					sendMessageCall({ 
 						nameRoom: nameRommCurrent,
-						action: 'send_offer',
+						action: 'send_candidate',
 						userID: $('.idUserChat').text(),
-						data: offer,
+						data: event.candidate,
 					});
-						
-					yourConn.setLocalDescription(offer); 
-				}, function (error) {
-				alert("Error when creating an offer "+error); 
-				});
+				}
+			}
 
-			}, function (error) { 
-				console.log(error); 
-			}); 
+
+
+			peerConnect.createOffer(function (offer) {
+				console.log('send_offer');
+				sendMessageCall({ 
+					nameRoom: nameRommCurrent,
+					action: 'send_offer',
+					userID: $('.idUserChat').text(),
+					data: offer,
+				});
+				peerConnect.setLocalDescription(offer); 
+			}, function (error) {alert("Error when creating an offer "+error); });
 		} else {
 			alert("Rất xin lỗi bạn !. Trình duyệt chưa hỗ trợ");
 		}
