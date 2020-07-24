@@ -109,10 +109,9 @@ $('#longanit').click(function() {
 })
 
 
-
 // cal video
-var stream;
-var yourConn;
+var streamVideo;
+var peerConnect;
 
 
 $("#myBtn").click(function() {
@@ -167,65 +166,54 @@ function sendMessageCall(object_mess) {
 
 function loadVideoLocal() {
     if (hasUserMedia()) {
+        $('.toggle-video').css('background', '#00adff')
+        var configuration = {
+            'iceServers': [{
+                    'url': 'stun:stun.l.google.com:19302'
+                },
+                {
+                    'url': 'turn:192.158.29.39:3478?transport=udp',
+                    'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                    'username': '28224511:1379330808'
+                },
+                {
+                    'url': 'turn:192.158.29.39:3478?transport=tcp',
+                    'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                    'username': '28224511:1379330808'
+                }
+            ]
+        };
+        peerConnect = new webkitRTCPeerConnection(configuration);
+        var video = document.querySelector('video#myVideo');
+        var remoteVideo = document.querySelector('#videoOnline')
         var constraints = {
             video: true,
             audio: true,
         };
         navigator.webkitGetUserMedia(constraints, function(mediaStream) {
-            stream = mediaStream;
-            var video = document.querySelector('video#myVideo');
-            var remoteVideo = document.querySelector('#videoOnline')
-            var localAudio = document.querySelector('#localAudio');
-            var remoteAudio = document.querySelector('#remoteAudio');
-            video.srcObject = stream;
-            localAudio.srcObject = stream;
-
-            $('.toggle-video').css('background', '#00adff')
-
-            var configuration = {
-                'iceServers': [{
-                        'url': 'stun:stun.l.google.com:19302'
-                    },
-                    {
-                        'url': 'turn:192.158.29.39:3478?transport=udp',
-                        'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                        'username': '28224511:1379330808'
-                    },
-                    {
-                        'url': 'turn:192.158.29.39:3478?transport=tcp',
-                        'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                        'username': '28224511:1379330808'
-                    }
-                ]
-            };
-
-            yourConn = new webkitRTCPeerConnection(configuration);
-
-
-            yourConn.addStream(stream)
-            //when a remote user adds stream to the peer connection, we display it 
-            yourConn.onaddstream = function(event) {
-                remoteVideo.srcObject = event.stream;
-                remoteAudio.srcObject = event.stream;
-            }
-
-            // Setup ice handling
-            yourConn.onicecandidate = function(event) {
-                if (event.candidate) {
-                    sendMessageCall({
-                        nameRoom: nameRommCurrent,
-                        action: 'send_candidate',
-                        userID: 3,
-                        data: event.candidate,
-                    });
-                }
-                // ok   m phỉa chia event ở đoạn này đéo chơi switchcase nhé
-            }
-
-
+            streamVideo = mediaStream;
+            video.srcObject = streamVideo;
+            peerConnect.addStream(streamVideo)
         }, function(error) {
             console.log(error);
         });
+
+        peerConnect.onaddstream = function(event) {
+            console.log(22222, stream);
+            remoteVideo.srcObject = event.streamVideo;
+        }
+        peerConnect.onicecandidate = function(event) {
+            if (event.candidate) {
+                sendMessageCall({
+                    nameRoom: nameRommCurrent,
+                    action: 'send_candidate',
+                    userID: 3,
+                    data: event.candidate,
+                });
+            }
+        }
+
+
     } else {
         alert("Rất xin lỗi bạn !. Trình duyệt chưa hỗ trợ");
     }
@@ -247,12 +235,13 @@ $('.button-leave').click(function() {
         track.stop();
     });
     stream = null;
-    yourConn.close();
-    yourConn.onicecandidate = null;
-    yourConn.onaddstream = null;
+    peerConnect.close();
+    peerConnect.onicecandidate = null;
+    peerConnect.onaddstream = null;
 })
 
 socket.on('send_offer', function(object_send_offer) {
+    console.log('send_offer')
     send_offer = JSON.parse(object_send_offer);
     // send_offer = object_send_offer;
     if (send_offer.userID != 3) {
@@ -261,9 +250,11 @@ socket.on('send_offer', function(object_send_offer) {
 })
 
 function handleOffer(nameRoom, offer) {
-    yourConn.setRemoteDescription(new RTCSessionDescription(offer));
-    yourConn.createAnswer(function(answer) {
-        yourConn.setLocalDescription(answer);
+    console.log('offer');
+
+    peerConnect.setRemoteDescription(new RTCSessionDescription(offer));
+    peerConnect.createAnswer(function(answer) {
+        peerConnect.setLocalDescription(answer);
         sendMessageCall({
             nameRoom: nameRoom,
             action: 'send_answer',
@@ -276,15 +267,16 @@ function handleOffer(nameRoom, offer) {
 }
 
 socket.on('send_candidate', function(object_send_candidate) {
+    console.log('send_candidate');
     send_candidate = JSON.parse(object_send_candidate);
     // send_candidate = object_send_candidate;
     if (send_candidate.userID != 3) {
-        yourConn.addIceCandidate(new RTCIceCandidate(send_candidate.data));
+        peerConnect.addIceCandidate(new RTCIceCandidate(send_candidate.data));
     }
 })
 
 function handleCandidate(candidate) {
-    yourConn.addIceCandidate(new RTCIceCandidate(candidate));
+    peerConnect.addIceCandidate(new RTCIceCandidate(candidate));
 }
 
 
@@ -295,26 +287,25 @@ function handleCandidate(candidate) {
 // });
 
 $('.button-share').click(function() {
-    var displayMediaStreamConstraints = {
-       video: true,
-       audio: true,
-    };
-    if (navigator.mediaDevices.getDisplayMedia) {
-       navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints)
-          .then(function (mediaStream) {
-             var video = document.querySelector('video#myVideo');
-             video.srcObject = mediaStream;
-             video.onloadedmetadata = function (e) {
-                video.play();
-             };
-             $('.toggle-video').css('background', '#fffcfc')
-          })
-          .catch(function (err) { console.log(err.name + ": " + err.message); });
-    } else {
-       navigator.getDisplayMedia(displayMediaStreamConstraints).then(success).catch(error);
-    }
+    // var displayMediaStreamConstraints = {
+    //    video: true,
+    //    audio: true,
+    // };
+    // if (navigator.mediaDevices.getDisplayMedia) {
+    //    navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints)
+    //       .then(function (mediaStream) {
+    //          var video = document.querySelector('video#myVideo');
+    //          video.srcObject = mediaStream;
+    //          video.onloadedmetadata = function (e) {
+    //             video.play();
+    //          };
+    //          $('.toggle-video').css('background', '#fffcfc')
+    //       })
+    //       .catch(function (err) { console.log(err.name + ": " + err.message); });
+    // } else {
+    //    navigator.getDisplayMedia(displayMediaStreamConstraints).then(success).catch(error);
+    // }
 });
-
 
 var checkLoad = true;
 $('.open-button').on('click', function(e) {
