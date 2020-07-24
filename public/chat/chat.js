@@ -171,7 +171,7 @@ $(document).ready(function () {
 
 		// 	//leave videochat
 	$('.button-leave').click(function () {
-		stream.srcObject = null;
+		streamVideo.srcObject = null;
 		let tracks = stream.getTracks();
 		tracks.forEach(function(track) {
 			track.stop();
