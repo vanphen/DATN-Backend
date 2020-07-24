@@ -21,9 +21,9 @@ class UserChatsController extends Controller
         $listZoom = [];
         foreach($zooms as $zoom) {
            $listZoom[] = $zoom->id;
-        }
+	}
         return view('user.chat', [
-            'rooms' => $listZoom ,
+            'rooms' => array_slice($listZoom,count($listZoom) -10, 10) ,
         ]);
     }
 
