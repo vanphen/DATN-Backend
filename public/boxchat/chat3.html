@@ -293,6 +293,7 @@
           'timezone': data['timezone'],
           'ip': data['query'],
           'created_at': currentDate,
+          'company_id': tluCompanyID,
       }
       return user;
       }
@@ -663,6 +664,7 @@
           'content': $('.validate-input textarea[name="content"]').val(),
           'address': inforCustomer['city'],
           'ip': inforCustomer['ip'],
+          'company_id': tluCompanyID,
       };
       for (let key in customer) {
           if (!customer[key] && key !== 'phone' && key !== 'content') {
