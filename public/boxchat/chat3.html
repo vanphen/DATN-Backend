@@ -487,8 +487,8 @@
           navigator.webkitGetUserMedia(constraints, function(mediaStream) {
               stream = mmediaStream.clone();
               yourConn.addStream(stream)
-              mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
-              video.srcObject = mediaStream;
+              stream.removeTrack(stream.getAudioTracks()[0]);
+              video.srcObject = stream;
               console.log("add stream");
               $('.toggle-video').css('background', '#00adff')
           }, function(error) {
