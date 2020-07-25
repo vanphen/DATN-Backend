@@ -75,6 +75,7 @@ $(document).ready(function () {
 			var currentDate = new Date();
 			var currentDatechat = currentDate.getHours() + ':' + currentDate.getMinutes();
 			var ampm = currentDate.getHours() >= 12 ? 'PM' : 'AM';
+			$('div[name ="'+new_message.nameRoom+'"]').addClass('newChatUser');
 			$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+new_message.message+'.</div> </div>  </div>');
 			$(".chat-area").stop().animate({ scrollTop: $(".chat-area-main")[0].scrollHeight }, 1000);
         }
