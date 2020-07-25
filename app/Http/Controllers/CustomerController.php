@@ -19,7 +19,7 @@ class CustomerController extends Controller
     public function index()
     {   $customers = [];
 
-        foreach(Customer::all() as $info) {
+        foreach(Customer::where('company_id', auth()->user()->company_id)->get() as $info) {
             $customers[] = [
                 'id'      => $info->id,
                 'name'    => $info->name,
