@@ -237,8 +237,8 @@ $(document).ready(function () {
 			var remoteVideo = document.querySelector('video#videoOnline')
 
 			navigator.webkitGetUserMedia({video: true,audio: true,}, function (mediaStream) {
-				stream = mediaStream;
-				video.srcObject = stream;
+				//stream = mediaStream;
+				//video.srcObject = stream;
 
 
 				var configuration = { 
@@ -260,7 +260,13 @@ $(document).ready(function () {
 				};
 
 				peerConnect = new webkitRTCPeerConnection(configuration); 
-				peerConnect.addStream(stream);
+				streamVideo = mediaStream.clone();
+				peerConnect.addStream(streamVideo)
+				mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
+				video.srcObject = mediaStream;
+
+
+
 				peerConnect.onaddstream = function(event) {
 					remoteVideo.srcObject = event.stream;
 				}
