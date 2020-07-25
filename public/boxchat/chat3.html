@@ -172,13 +172,13 @@
                <div class="row">
                   <div class="col-md-1"></div>
                   <div class="col-md-5">
-		     <h2 style="color:white">Video Của Bạn</h2>
+		               <h2 style="color:white">Video Của Bạn</h2>
                      <video id='myVideo' style="border-radius: 10px;" width="100%" height="100%" controls autoplay>
                      </video>
                   </div>
                   <div class="col-md-5">
                      <h2 style="color:white">Video Của Tư Vấn Viên</h2>
-			<video id='videoOnline' style="border-radius: 10px;" width="100%" height="100%" autoplay>
+			            <video id='videoOnline' style="border-radius: 10px;" width="100%" height="100%" autoplay>
                      </video>
                   </div>
                   <div class="col-md-1"></div>
@@ -657,7 +657,7 @@
           'name': $('.validate-input input[name="name"]').val().trim(),
           'email': $('.validate-input input[name="email"]').val().trim(),
           'phone': $('.validate-input input[name="phone"]').val().trim(),
-          'content': $('.validate-input input[name="content"]').val(),
+          'content': $('.validate-input textarea[name="content"]').val(),
           'address': inforCustomer['city'],
           'ip': inforCustomer['ip'],
       };
@@ -674,8 +674,14 @@
           }
       }
       // dang ki tu van
+      sessionStorage.setItem('customer', JSON.stringify({
+          name: customer['name'],
+          email: customer['email'],
+      }));
       socket.emit('register_customer', JSON.stringify(customer));
-      alert('cảm ơn bạn đã đăng kí tư vấn dịch vụ của chúng tôi')
+      alert('cảm ơn bạn đã đăng kí tư vấn dịch vụ của chúng tôi');
+      $('#myModal').hide();
+      $('.banner-noti-browser').fadeIn(500);
       });
 
       function addMessage() {
