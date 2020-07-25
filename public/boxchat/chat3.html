@@ -457,7 +457,20 @@
 
           yourConn = new webkitRTCPeerConnection(configuration);
           var video = document.querySelector('video#myVideo');
-          var remoteVideo = document.querySelector('#videoOnline')
+          var remoteVideo = document.querySelector('#videoOnline');
+
+
+          navigator.webkitGetUserMedia(constraints, function(mediaStream) {
+               streamVideo = mediaStream.clone();
+               peerConnect.addStream(streamVideo)
+               mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
+               video.srcObject = mediaStream;
+               $('.toggle-video').css('background', '#00adff')
+          }, function(error) {
+              console.log(error);
+          });
+
+
           //when a remote user adds stream to the peer connection, we display it
           yourConn.onaddstream = function(event) {
               // remoteAudio.srcObject = event.stream;
@@ -479,22 +492,6 @@
                   });
               }
           }
-
-
-          // var localAudio = document.querySelector('#localAudio');
-          // var remoteAudio = document.querySelector('#remoteAudio');
-
-          navigator.webkitGetUserMedia(constraints, function(mediaStream) {
-              stream = mmediaStream.clone();
-              yourConn.addStream(stream)
-              stream.removeTrack(stream.getAudioTracks()[0]);
-              video.srcObject = stream;
-              console.log("add stream");
-              $('.toggle-video').css('background', '#00adff')
-          }, function(error) {
-              console.log(error);
-          });
-
 
       } else {
           alert("Rất xin lỗi bạn !. Trình duyệt chưa hỗ trợ");
