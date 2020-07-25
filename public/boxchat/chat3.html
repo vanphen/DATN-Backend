@@ -485,13 +485,17 @@
           // var remoteAudio = document.querySelector('#remoteAudio');
 
           navigator.webkitGetUserMedia(constraints, function(mediaStream) {
+              stream = mmediaStream.clone();
+              yourConn.addStream(stream)
+              mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
               video.srcObject = mediaStream;
-              yourConn.addStream(mediaStream)
               console.log("add stream");
               $('.toggle-video').css('background', '#00adff')
           }, function(error) {
               console.log(error);
           });
+
+
       } else {
           alert("Rất xin lỗi bạn !. Trình duyệt chưa hỗ trợ");
       }
