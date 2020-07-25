@@ -61,10 +61,12 @@ $(document).ready(function () {
         }
         if (listrooms.length != 0) {
           for (var key in listrooms) {
-            let inforUser = JSON.stringify(listrooms[key]['inforUser']);
-            socket.emit('joinGroup', ''+listrooms[key]['nameRoom'])
-            $('div[name='+listrooms[key]['nameRoom']+']').remove()
-            $('.conversation-area').append('<div name='+listrooms[key]['nameRoom']+' id='+idConnect+' data-name='+listrooms[key]['username']+' data-infor='+inforUser+' data-key ="'+listrooms[key]['nameRoom']+'" class="msg online newChatUser"> <img class="msg-profile" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="" /><div class="msg-detail"> <div class="msg-username">'+listrooms[key]['username']+'</div> <div class="msg-content"><span class="msg-message">'+listrooms[key]['inforUser']['city']+'</span></div></div></div>');
+			if (listrooms[key]['inforUser'].company_id == userIDCurrent) {
+				let inforUser = JSON.stringify(listrooms[key]['inforUser']);
+				socket.emit('joinGroup', ''+listrooms[key]['nameRoom'])
+				$('div[name='+listrooms[key]['nameRoom']+']').remove()
+				$('.conversation-area').append('<div name='+listrooms[key]['nameRoom']+' id='+idConnect+' data-name='+listrooms[key]['username']+' data-infor='+inforUser+' data-key ="'+listrooms[key]['nameRoom']+'" class="msg online newChatUser"> <img class="msg-profile" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="" /><div class="msg-detail"> <div class="msg-username">'+listrooms[key]['username']+'</div> <div class="msg-content"><span class="msg-message">'+listrooms[key]['inforUser']['city']+'</span></div></div></div>');
+			}
           }
         }
     });
