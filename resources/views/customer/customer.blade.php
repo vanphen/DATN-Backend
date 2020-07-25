@@ -49,7 +49,7 @@
 						<th><?php echo $customer['address'] ?></th>
 						<th><?php echo $customer['ip'] ?></th>
 						<th><?php echo $customer['message'] ?></th>
-						<th class ="customer-status"><?php if($customer['status'] == 0){ echo 'chưa tư vấn';} else {echo 'đã tư vấn';} ?></th>
+						<th class ="customer-status<?php echo $customer['id'] ?>"><?php if($customer['status'] == 0){ echo 'chưa tư vấn';} else {echo 'đã tư vấn';} ?></th>
 						<th><?php echo  date("M d Y", strtotime($customer['created_at'])) ?></th>
 						<td>
 							<a href="javascript: void(0)" onclick="updateStatus(<?php echo $customer['id'] ?>)" class="edit"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Edit">done_outline</i></a>
@@ -86,7 +86,7 @@
 		.then(function (response) {
 			if (response.status == 200) {
                 if (response.data['status'] == 'OK'){
-                    $('.customer-status').text('đã tư vấn');
+                    $('.customer-status'+id).text('đã tư vấn');
                     alter('Cập nhật tư vấn thành công');
                 }
 			}
