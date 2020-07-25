@@ -47,9 +47,20 @@ class UserChatsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        //
+        $message = Message::where('user_id', $id)->get();
+        $room = Zoom::all();
+        $numberCustomer = [];
+        foreach($message as $key) {
+            $numberCustomer[] = $key->zoom_id;
+        }
+        $countMessage = count($message);
+        return json_encode([
+            'countMessage' => $countMessage,
+            'numberCustomer' => count(array_unique($numberCustomer)),
+            'numberZoom' => count($room),
+        ]);
     }
 
     /**
@@ -97,21 +108,6 @@ class UserChatsController extends Controller
     public function destroy(UserChats $userChats)
     {
         //
-    }
-
-    public function getInforActivity(Request $request, $id) {
-        $message = Message::where('user_id', $id)->get();
-        $room = Zoom::all();
-        $numberCustomer = [];
-        foreach($message as $key) {
-            $numberCustomer[] = $key->zoom_id;
-        }
-        $countMessage = count($message);
-        return json_encode([
-            'countMessage' => $countMessage,
-            'numberCustomer' => count(array_unique($numberCustomer)),
-            'numberZoom' => count($room),
-        ]);
     }
 
 }

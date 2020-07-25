@@ -24,6 +24,5 @@ Route::delete('/manage/delete{id}', 'Admin\ManageController@destroy')->name('del
 Route::put('/profile/changepassword', 'User\ProfileController@updatePassWord')->name('changePass');
 Route::put('/customer/updateStatus/{id}', 'CustomerController@update')->name('updatestatus');
 Route::delete('/customer/destroy/{id}', 'CustomerController@destroy')->name('delete');
-Route::get('/getActivity/{id}', 'UserChatsController@getInforActivity');
-
+Route::get('/getActivity/{id}', 'UserChatsController@store')->name('getInfo');
 Route::put('/company/update', 'SuperAdmin\ManageController@update');
