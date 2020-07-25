@@ -22,8 +22,9 @@ class ManageController extends Controller
     public function index()
     {
         $users = [];
-        foreach(App\User::all() as $info) {
-            if ($info->type == 2) {
+        $employees = App\User::where('company_id', auth()->user()->company_id)->get();
+        foreach($employees as $info) {
+            if ($info->type == 2 && auth()->user()->company_id) {
                 $users[] =  [
                     'id'     => $info->id,
                     'name'   => $info->name,

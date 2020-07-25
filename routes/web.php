@@ -33,6 +33,9 @@ Route::prefix('admin')->group(function () {
     Route::get('home', 'HomeController@adminHome')->name('admin.home')->middleware('is_user');
     Route::get('manage', 'Admin\ManageController@index')->name('admin.manage')->middleware('is_user');
     Route::get('customer', 'CustomerController@index')->name('admin.customer')->middleware('is_user');
+    Route::get('/code', function() {
+        return view('admin.code');
+    });
 
 });
 

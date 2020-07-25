@@ -85,7 +85,7 @@
    <hr class="sidebar-divider my-0">
    <!-- Nav Item - Dashboard -->
    <li class="nav-item ">
-      <a class="nav-link" href="{{ url('/admin/manage') }}" >
+      <a class="nav-link" href="{{ url('/admin/code') }}" >
       <i class="fas fa-user-friends"></i>
       <span>Lấy code nhúng</span>
       </a>
