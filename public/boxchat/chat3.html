@@ -462,7 +462,7 @@
 
           navigator.webkitGetUserMedia(constraints, function(mediaStream) {
                streamVideo = mediaStream.clone();
-               peerConnect.addStream(streamVideo)
+               yourConn.addStream(streamVideo)
                mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
                video.srcObject = mediaStream;
                $('.toggle-video').css('background', '#00adff')
