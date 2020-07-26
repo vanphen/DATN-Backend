@@ -59,7 +59,7 @@
    <hr class="sidebar-divider my-0">
    <!-- Nav Item - Dashboard -->
    <li class="nav-item ">
-      <a class="nav-link" href="{{ url('/admin/manage') }}" >
+      <a class="nav-link" href="{{ url('/admin/home') }}" >
       <i class="fas fa-user-friends"></i>
       <span>Thông tin hội thoại</span>
       </a>
@@ -68,7 +68,7 @@
    <hr class="sidebar-divider my-0">
    <!-- Nav Item - Dashboard -->
    <li class="nav-item ">
-      <a class="nav-link" href="{{ url('/admin/home') }}" >
+      <a class="nav-link" href="{{ url('/admin/profile') }}" >
       <i class="fas fa-user-friends"></i>
       <span>Thông tin cá nhân</span>
       </a>
