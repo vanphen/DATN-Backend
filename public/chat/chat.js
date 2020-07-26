@@ -238,42 +238,41 @@ $(document).ready(function () {
 			var video = document.querySelector('video#myVideo');
 			var remoteVideo = document.querySelector('video#videoOnline')
 
+			var configuration = { 
+				'iceServers': [ 
+					{
+						url: 'turn:numb.viagenie.ca',
+						credential: 'muazkh',
+						username: 'webrtc@live.com'
+					},
+					{
+						url: 'turn:192.158.29.39:3478?transport=udp',
+						credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+						username: '28224511:1379330808'
+					},
+					{
+						url: 'turn:192.158.29.39:3478?transport=tcp',
+						credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+						username: '28224511:1379330808'
+					},
+					{
+						url: 'turn:turn.bistri.com:80',
+						credential: 'homeo',
+						username: 'homeo'
+					 },
+					 {
+						url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+						credential: 'webrtc',
+						username: 'webrtc'
+					}
+				]
+			};
+
+			peerConnect = new webkitRTCPeerConnection(configuration);
 			navigator.webkitGetUserMedia({video: true,audio: true,}, function (mediaStream) {
 				//stream = mediaStream;
 				//video.srcObject = stream;
 
-
-				var configuration = { 
-					'iceServers': [ 
-						{
-							url: 'turn:numb.viagenie.ca',
-							credential: 'muazkh',
-							username: 'webrtc@live.com'
-						},
-						{
-							url: 'turn:192.158.29.39:3478?transport=udp',
-							credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-							username: '28224511:1379330808'
-						},
-						{
-							url: 'turn:192.158.29.39:3478?transport=tcp',
-							credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-							username: '28224511:1379330808'
-						},
-						{
-							url: 'turn:turn.bistri.com:80',
-							credential: 'homeo',
-							username: 'homeo'
-						 },
-						 {
-							url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-							credential: 'webrtc',
-							username: 'webrtc'
-						}
-					]
-				};
-
-				peerConnect = new webkitRTCPeerConnection(configuration); 
 				streamVideo = mediaStream.clone();
 				peerConnect.addStream(streamVideo)
 				mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
