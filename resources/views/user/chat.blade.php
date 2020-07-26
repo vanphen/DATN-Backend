@@ -185,7 +185,7 @@
     </div>
   </div>
   <audio id="myAudio">
-  <source src="{{ asset('/library/messagenew.mp3')}}" type="audio/mpeg">
+  <source src="http://54.238.235.205/boxchat/messagenew.mp3" type="audio/mpeg">
 </audio>
 @endsection
 @section('jsScript')
