@@ -235,8 +235,10 @@ $(document).ready(function () {
 	function loadVideoLocal() {
 		if (hasUserMedia()) {
 			$('.toggle-video').css('background', '#00adff')
-			var video = document.querySelector('video#myVideo');
-			var remoteVideo = document.querySelector('video#videoOnline')
+			var constraints = {
+				video: true,
+				audio: true,
+			};
 
 			var configuration = { 
 				'iceServers': [ 
@@ -269,14 +271,15 @@ $(document).ready(function () {
 			};
 
 			peerConnect = new webkitRTCPeerConnection(configuration);
-			
-			navigator.webkitGetUserMedia({video: true,audio: true,}, function (mediaStream) {
+			var video = document.querySelector('video#myVideo');
+			var remoteVideo = document.querySelector('video#videoOnline')
+
+			navigator.webkitGetUserMedia(constraints , function (mediaStream) {
 
 				streamVideo = mediaStream.clone();
 				peerConnect.addStream(streamVideo)
 				mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
 				video.srcObject = mediaStream;
-
 			}, function (error) {console.log(error);});
 
 			peerConnect.onaddstream = function(event) {
