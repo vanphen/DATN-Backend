@@ -451,12 +451,11 @@ function loadVideoLocal() {
         };
         navigator.webkitGetUserMedia(constraints, function(mediaStream) {
        
-	  streamVideo = mediaStream.clone();
-		              peerConnect.addStream(streamVideo)
-		              mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
-		              video.srcObject = mediaStream;
-	
-	}, function(error) {
+	    streamVideo = mediaStream.clone();
+        peerConnect.addStream(streamVideo)
+        mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
+        video.srcObject = mediaStream;
+	    }, function(error) {
             console.log(error);
         });
 
@@ -676,7 +675,6 @@ function addMessage() {
             listMessages.forEach(element => {
                 if (element.user_id == 3) {
                     $('.msg_card_body').append(`<div class="msg-chat d-flex justify-content-end mb-4"><div class="msg_cotainer_send">${element.content}<span class="msg_time_send">today </span></div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"></div></div>`);
-
                 } else {
                     $('.msg_card_body').append(`<div class="msg-chat d-flex justify-content-start mb-4"> <div class="img_cont_msg"> <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"  class="rounded-circle user_img_msg">  </div> <div class="msg_cotainer">  ${element.content} .<span class="msg_time">Today</span></div></div>`);
                 }

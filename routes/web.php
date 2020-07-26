@@ -28,7 +28,7 @@ Route::get('/profile/edit', function() {
 });
 Route::get('/customer', 'CustomerController@index')->name('user.customer')->middleware('is_user');
 
-Route::prefix('admin')->group(function () {
+Route::prefix('/admin')->group(function () {
     Route::get('/', 'HomeController@adminHome')->name('admin.index')->middleware('is_user');
     Route::get('home', 'HomeController@adminHome')->name('admin.home')->middleware('is_user');
     Route::get('manage', 'Admin\ManageController@index')->name('admin.manage')->middleware('is_user');
@@ -39,7 +39,7 @@ Route::prefix('admin')->group(function () {
 
 });
 
-Route::prefix('superadmin')->group(function () {
+Route::prefix('/superadmin')->group(function () {
     Route::get('/', 'HomeController@superadmin')->name('superadmin.index')->middleware('is_user');
     Route::get('home', 'HomeController@superadmin')->name('superadmin.home')->middleware('is_user');
     Route::get('manage', 'SuperAdmin\ManageController@index')->name('superadmin.manage')->middleware('is_user');

@@ -53,14 +53,14 @@
         <a class="nav-link" href="{{ url('/userchat') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <p style="display:none" class="idUserChat">{{  Auth::user()->id }}</p>
-          <span>Chat user</span></a>
+          <span>Chăm sóc khách hàng</span></a>
    </li>
    <hr class="sidebar-divider d-none d-md-block">
    <li class="nav-item">
         <a class="nav-link" href="{{ url('/profile') }}">
           <i class="fas fa-fw fa-table"></i>
           <span>Thông tin cá nhân</span></a>
-      </li>
+   </li>
 
       <hr class="sidebar-divider d-none d-md-block">
    <li class="nav-item">

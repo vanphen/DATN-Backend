@@ -21,7 +21,7 @@ class UserChatsController extends Controller
      */
     public function index()
     {
-        $zooms = App\Zoom::all();
+        $zooms = App\Zoom::where('company_id', auth()->user()->company_id)->get();
         $listZoom = [];
         foreach($zooms as $zoom) {
             $checkroom = Message::where('zoom_id', $zoom->id)->get('id');

@@ -23,7 +23,7 @@ $(document).ready(function () {
 		$(".input-datasend").attr("data-key", $(this).data("key"));
 		socket.emit('joinGroup', $(this).data("key"))
 		$(".chat-area-main> .chat-msg").remove();
-
+		let idZoomCustomer = $(this).data("key")
 		axios.get('/api/getMessage/'+$(this).data("key"))
 		.then(function (response) {
 			listMessage = response['data'];
@@ -32,7 +32,11 @@ $(document).ready(function () {
 				var currentDatechat = currentDate.getHours() + ':' + currentDate.getMinutes();
 				var ampm = currentDate.getHours() >= 12 ? 'PM' : 'AM';
 				if (listMessage[message]['user_id'] == 3) {
-					$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+listMessage[message]['content']+'.</div> </div>  </div>');
+					if (idZoomCustomer === listMessage[message]['content']) {
+						$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text"><div class="card"> <div class="card-body"><h5 class="card-title">Thông báo cuộc gọi</h5><p class="card-text">Bạn có cuộc gọi từ khách hàng</p><a href="javascript:void(0)" class="btn btn-primary" onclick="clickCall()">Gọi Ngay !</a></div></div></div> </div>  </div>');
+					} else {
+						$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+listMessage[message]['content']+'.</div> </div>  </div>');
+					}
 				} else {
 					$('.chat-area-main').append('<div class="chat-msg owner"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+listMessage[message]['content']+'.</div> </div>  </div>');
 				}
@@ -73,12 +77,19 @@ $(document).ready(function () {
 
     socket.on('my_message', function(object_message) {
 		let new_message = JSON.parse(object_message);
+		console.log(1111,new_message);
         if (new_message.userID == 3) {
+			var x = document.getElementById("myAudio"); 
+			x.play();
 			var currentDate = new Date();
 			var currentDatechat = currentDate.getHours() + ':' + currentDate.getMinutes();
 			var ampm = currentDate.getHours() >= 12 ? 'PM' : 'AM';
 			$('div[name ="'+new_message.nameRoom+'"]').addClass('newChatUser');
-			$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+new_message.message+'.</div> </div>  </div>');
+			if (new_message.message == new_message.nameRoom) {
+				$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text"><div class="card"> <div class="card-body"><h5 class="card-title">Thông báo cuộc gọi</h5><p class="card-text">Bạn có cuộc gọi từ khách hàng</p><a href="javascript:void(0)" class="btn btn-primary" onclick="clickCall()">Gọi Ngay !</a></div></div></div> </div>  </div>');
+			} else {
+				$('.chat-area-main').append('<div class="chat-msg"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+new_message.message+'.</div> </div>  </div>');
+			}
 			$(".chat-area").stop().animate({ scrollTop: $(".chat-area-main")[0].scrollHeight }, 1000);
         }
     })
@@ -114,11 +125,17 @@ $(document).ready(function () {
 	
 	var stream;
 	var peerConnect;
-
+	var timeOut;
 
 	// // click button call video 
 
+
 	$("#myBtn").click(function () {
+		if (!nameRommCurrent) {
+			alert('Bạn chưa chọn Room để call');
+			return;
+		}
+		$('body').LoadingOverlay("show");
 		let new_call = {
 			nameRoom: nameRommCurrent,
 			calling: true,
@@ -126,6 +143,10 @@ $(document).ready(function () {
 			userID: $('.idUserChat').text(),
 		}
 		sendMessageCall(new_call);
+		timeOut = setTimeout(function(){
+			$('body').LoadingOverlay("hide");
+			alert("Người dùng không bắt máy"); 
+		}, 30000);
 	});
 
 	function sendMessageCall(object_mess) {
@@ -137,6 +158,7 @@ $(document).ready(function () {
 		let anser_call = JSON.parse(new_call);
 		// let anser_call = new_call;
 		if (anser_call.userID == 3) {
+			clearTimeout(timeOut);
 			if (anser_call.calling) {
 					  // create an offer 
 				loadVideoLocal();
@@ -145,8 +167,9 @@ $(document).ready(function () {
 					keyboard: false
 				});
 			} else {
-				alert('khong dong y')
+				alert('Khách hàng từ chối cuộc gọi')
 			}
+			$('body').LoadingOverlay("hide");
 		}
 	});
 
@@ -174,16 +197,10 @@ $(document).ready(function () {
 
 		// 	//leave videochat
 	$('.button-leave').click(function () {
-		stream.srcObject = null;
-		let tracks = stream.getTracks();
-		tracks.forEach(function(track) {
-			track.stop();
-		});
-		remoteAudio.src = null; 
-		console.log(stream);
-		peerConnect.close(); 
-		peerConnect.onicecandidate = null; 
-		peerConnect.onaddstream = null; 
+        stream.getTracks().forEach(function(track) {
+            track.stop()
+        });
+        peerConnect.close();
 	})
 	
 	
@@ -203,12 +220,13 @@ $(document).ready(function () {
 				navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints)
 					.then(function (mediaStream) {
 						var video = document.querySelector('video#myVideo');
+						stream = mediaStream;
 						video.srcObject = mediaStream;
-						console.log(2222,peerConnect.onaddstream(mediaStream));
-						console.log(1111,peerConnect);
-						video.onloadedmetadata = function (e) {
-							video.play();
-						};
+						let videoStream = mediaStream.getVideoTracks()[0]
+						var sender = peerConnect.getSenders().find(function(s) {
+						return s.track.kind == videoStream.kind;
+						});
+						sender.replaceTrack(videoStream);
 						$('.toggle-video').css('background', '#fffcfc')
 					})
 					.catch(function (err) {
@@ -275,7 +293,7 @@ $(document).ready(function () {
 
 			peerConnect = new webkitRTCPeerConnection(configuration);
 			navigator.webkitGetUserMedia({video: true,audio: true,}, function (mediaStream) {
-
+				stream = mediaStream;
 				streamVideo = mediaStream.clone();
 				peerConnect.addStream(streamVideo)
 				mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
