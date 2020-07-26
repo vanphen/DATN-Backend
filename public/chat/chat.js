@@ -269,42 +269,40 @@ $(document).ready(function () {
 			};
 
 			peerConnect = new webkitRTCPeerConnection(configuration);
+			
 			navigator.webkitGetUserMedia({video: true,audio: true,}, function (mediaStream) {
-				//stream = mediaStream;
-				//video.srcObject = stream;
 
 				streamVideo = mediaStream.clone();
 				peerConnect.addStream(streamVideo)
 				mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
 				video.srcObject = mediaStream;
 
+			}, function (error) {console.log(error);});
 
-
-				peerConnect.onaddstream = function(event) {
-					remoteVideo.srcObject = event.stream;
-				}
-				peerConnect.onicecandidate = function(event) {
-					if (event.candidate) {
-						sendMessageCall({ 
-							nameRoom: nameRommCurrent,
-							action: 'send_candidate',
-							userID: $('.idUserChat').text(),
-							data: event.candidate,
-						});
-					}
-				}
-				peerConnect.createOffer(function (offer) {
-					console.log('send_offer');
+			peerConnect.onaddstream = function(event) {
+				remoteVideo.srcObject = event.stream;
+			}
+			peerConnect.onicecandidate = function(event) {
+				if (event.candidate) {
 					sendMessageCall({ 
 						nameRoom: nameRommCurrent,
-						action: 'send_offer',
+						action: 'send_candidate',
 						userID: $('.idUserChat').text(),
-						data: offer,
+						data: event.candidate,
 					});
-					peerConnect.setLocalDescription(offer); 
-				}, function (error) {alert("Error when creating an offer "+error); });
+				}
+			}
+			peerConnect.createOffer(function (offer) {
+				console.log('send_offer');
+				sendMessageCall({ 
+					nameRoom: nameRommCurrent,
+					action: 'send_offer',
+					userID: $('.idUserChat').text(),
+					data: offer,
+				});
+				peerConnect.setLocalDescription(offer); 
+			}, function (error) {alert("Error when creating an offer "+error); });
 
-			}, function (error) {console.log(error);}); 
 		} else {
 			alert("Rất xin lỗi bạn !. Trình duyệt chưa hỗ trợ");
 		}
