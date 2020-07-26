@@ -188,7 +188,7 @@
 @section('jsScript')
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        var socket = io.connect("http://18.183.81.183:9000/")
+        var socket = io.connect("http://54.238.235.205:9000/")
         var userIDCurrent = <?php echo Auth::user()->company_id; ?>
     </script>
     <script scope src="{{ asset('chat/chat.js') }}"> </script>

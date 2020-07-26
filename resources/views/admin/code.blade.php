@@ -24,9 +24,9 @@
             <!-- Card Body -->
             <div class="form-group">
                 <textarea class="form-control" readonly id="myInput" rows="10">
-<?php echo '<link rel="stylesheet" href="http://18.183.81.183/boxchat/app.min.css">
-<script src="http://18.183.81.183/boxchat/app.min.js"></script>
-<div id="tlu_rtc"></div> <script>const tluCompanyID = '.Auth::user()->company_id.';$("#tlu_rtc").load("http://18.183.81.183/boxchat/chat3.html");</script>'?>
+<?php echo '<link rel="stylesheet" href="http://54.238.235.205/boxchat/app.min.css">
+<script src="http://54.238.235.205/boxchat/app.min.js"></script>
+<div id="tlu_rtc"></div> <script>const tluCompanyID = '.Auth::user()->company_id.';$("#tlu_rtc").load("http://54.238.235.205/boxchat/chat3.html");</script>'?>
                 </textarea>
             </div>
          </div>

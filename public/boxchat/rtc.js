@@ -6,7 +6,7 @@ function initRTC(id){
 
 
 /////////////////////////
-var socket = io.connect("http://18.183.81.183:9000/");
+var socket = io.connect("http://54.238.235.205:9000/");
 
 var nameRoom;
 var nameRommCurrent;
