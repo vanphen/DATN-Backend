@@ -235,65 +235,52 @@ $(document).ready(function () {
 	function loadVideoLocal() {
 		if (hasUserMedia()) {
 			$('.toggle-video').css('background', '#00adff')
-			var constraints = {
-				video: true,
-				audio: true,
-			};
+			var video = document.querySelector('video#myVideo');
+			var remoteVideo = document.querySelector('video#videoOnline')
 
 			var configuration = { 
 				'iceServers': [ 
 					{
-						'url': 'stun:stun.l.google.com:19302'
-					},
-					{
-						'url': 'turn:192.158.29.39:3478?transport=udp',
-						'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-						'username': '28224511:1379330808'
-					},
-					{
-						'url': 'turn:192.158.29.39:3478?transport=tcp',
-						'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-						'username': '28224511:1379330808'
+						url: 'turn:numb.viagenie.ca',
+						credential: 'thanhph',
+						username: 'phamnoone@gmail.com'
 					}
 				]
 			};
 
 			peerConnect = new webkitRTCPeerConnection(configuration);
-			var video = document.querySelector('video#myVideo');
-			var remoteVideo = document.querySelector('video#videoOnline')
-
-			navigator.webkitGetUserMedia(constraints , function (mediaStream) {
+			navigator.webkitGetUserMedia({video: true,audio: true,}, function (mediaStream) {
 
 				streamVideo = mediaStream.clone();
 				peerConnect.addStream(streamVideo)
 				mediaStream.removeTrack(mediaStream.getAudioTracks()[0]);
 				video.srcObject = mediaStream;
-			}, function (error) {console.log(error);});
 
-			peerConnect.onaddstream = function(event) {
-				remoteVideo.srcObject = event.stream;
-			}
-			peerConnect.onicecandidate = function(event) {
-				if (event.candidate) {
+				peerConnect.onaddstream = function(event) {
+					remoteVideo.srcObject = event.stream;
+				}
+				peerConnect.onicecandidate = function(event) {
+					if (event.candidate) {
+						sendMessageCall({ 
+							nameRoom: nameRommCurrent,
+							action: 'send_candidate',
+							userID: $('.idUserChat').text(),
+							data: event.candidate,
+						});
+					}
+				}
+				peerConnect.createOffer(function (offer) {
+					console.log('send_offer');
 					sendMessageCall({ 
 						nameRoom: nameRommCurrent,
-						action: 'send_candidate',
+						action: 'send_offer',
 						userID: $('.idUserChat').text(),
-						data: event.candidate,
+						data: offer,
 					});
-				}
-			}
-			peerConnect.createOffer(function (offer) {
-				console.log('send_offer');
-				sendMessageCall({ 
-					nameRoom: nameRommCurrent,
-					action: 'send_offer',
-					userID: $('.idUserChat').text(),
-					data: offer,
-				});
-				peerConnect.setLocalDescription(offer); 
-			}, function (error) {alert("Error when creating an offer "+error); });
+					peerConnect.setLocalDescription(offer); 
+				}, function (error) {alert("Error when creating an offer "+error); });
 
+			}, function (error) {console.log(error);}); 
 		} else {
 			alert("Rất xin lỗi bạn !. Trình duyệt chưa hỗ trợ");
 		}
