@@ -326,14 +326,13 @@ return user;
 }
 
 socket.on('connect', async function() {
-let inforUser = await getInforUser();
+inforUser = await getInforUser();
 if (sessionStorage.getItem('nameGroup')) {
-    inforUser['nameGroup'] = sessionStorage.getItem('nameGroup')
+      inforUser['nameGroup'] = sessionStorage.getItem('nameGroup')
 }
 if (sessionStorage.getItem('userID')) {
-    inforUser['userID'] = sessionStorage.getItem('userID')
+      inforUser['userID'] = sessionStorage.getItem('userID')
 }
-socket.emit('them_thanh_vien', 'userchat', inforUser);
 });
 
 
@@ -682,6 +681,7 @@ $('#myModal').fadeIn(500);
 var x = document.getElementById("myAudio"); 
 x.play(); 
 $('.name_customer').text(customer['name'])
+socket.emit('them_thanh_vien', customer['name'], inforUser);
 });
 
 
