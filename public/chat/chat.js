@@ -69,7 +69,7 @@ $(document).ready(function () {
 				let inforUser = JSON.stringify(listrooms[key]['inforUser']);
 				socket.emit('joinGroup', ''+listrooms[key]['nameRoom'])
 				$('div[name='+listrooms[key]['nameRoom']+']').remove()
-				$('.conversation-area').append('<div name='+listrooms[key]['nameRoom']+' id='+idConnect+' data-name='+listrooms[key]['username']+' data-infor='+inforUser+' data-key ="'+listrooms[key]['nameRoom']+'" class="msg online newChatUser"> <img class="msg-profile" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="" /><div class="msg-detail"> <div class="msg-username">'+listrooms[key]['username']+'</div> <div class="msg-content"><span class="msg-message">'+listrooms[key]['inforUser']['city']+'</span></div></div></div>');
+				$('.conversation-area').prepend('<div name='+listrooms[key]['nameRoom']+' id='+idConnect+' data-name='+listrooms[key]['username']+' data-infor='+inforUser+' data-key ="'+listrooms[key]['nameRoom']+'" class="msg online newChatUser"> <img class="msg-profile" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="" /><div class="msg-detail"> <div class="msg-username">'+listrooms[key]['username']+'</div> <div class="msg-content"><span class="msg-message">'+listrooms[key]['inforUser']['city']+'</span></div></div></div>');
 			}
           }
         }
@@ -109,12 +109,12 @@ $(document).ready(function () {
         var currentDate = new Date();
         var currentDatechat = currentDate.getHours() + ':' + currentDate.getMinutes();
         var ampm = currentDate.getHours() >= 12 ? 'PM' : 'AM';
-        var nameGroup = $('.input-datasend').data("key");
+        // var nameGroup = $('.input-datasend').data("key");
         $('.chat-area-main').append('<div class="chat-msg owner"><div class="chat-msg-profile"> <img class="chat-msg-img" src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="">  <div class="chat-msg-date">Message seen '+currentDatechat+' '+ampm+'</div> </div> <div class="chat-msg-content"> <div class="chat-msg-text">'+contentMessage+'.</div> </div>  </div>');
         $('.input-datasend').val('');
 		$(".chat-area").stop().animate({ scrollTop: $(".chat-area-main")[0].scrollHeight }, 1000);
 		let message_new = {
-			nameRoom: nameGroup,
+			nameRoom: nameRommCurrent,
 			username: 'employee',
 			message: contentMessage,
 			userID: $('.idUserChat').text(),

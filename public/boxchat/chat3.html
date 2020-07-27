@@ -436,6 +436,7 @@ socket.on('new_call', function(object_new_call) {
           backdrop: 'static',
           keyboard: false
       });
+      $("#myModalNotificationCall").fadeIn();
       var x = document.getElementById("myAudioNewCall"); 
       x.play();
   }
@@ -463,7 +464,7 @@ $('.accept-call').on('click', function() {
   });
   $('#myModal').hide();
   $('.icon-chat').fadeIn();
-  $("#myModalNotificationCall").hide();
+  $("#myModalNotificationCall").fadeOut();
   loadVideoLocal();
   let anser_new_call = {
         nameRoom: object_call.nameRoom,
