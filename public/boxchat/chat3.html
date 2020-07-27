@@ -329,12 +329,11 @@ socket.on('connect', async function() {
 inforUser = await getInforUser();
 if (sessionStorage.getItem('nameGroup')) {
       inforUser['nameGroup'] = sessionStorage.getItem('nameGroup');
-} else {
-   inforuser['nameGroup'] = nameRommCurrent;
 }
 if (sessionStorage.getItem('userID')) {
       inforUser['userID'] = sessionStorage.getItem('userID')
 }
+socket.emit('them_thanh_vien', 'khách hàng', inforUser);
 });
 
 
@@ -683,7 +682,7 @@ $('#myModal').fadeIn(500);
 var x = document.getElementById("myAudio"); 
 x.play(); 
 $('.name_customer').text(customer['name'])
-socket.emit('them_thanh_vien', customer['name'], inforUser);
+
 });
 
 
