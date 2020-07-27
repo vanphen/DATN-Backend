@@ -329,6 +329,8 @@ socket.on('connect', async function() {
 inforUser = await getInforUser();
 if (sessionStorage.getItem('nameGroup')) {
       inforUser['nameGroup'] = sessionStorage.getItem('nameGroup');
+} else {
+   inforuser['nameGroup'] = nameRommCurrent;
 }
 if (sessionStorage.getItem('userID')) {
       inforUser['userID'] = sessionStorage.getItem('userID')
