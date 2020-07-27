@@ -328,7 +328,8 @@ return user;
 socket.on('connect', async function() {
 inforUser = await getInforUser();
 if (sessionStorage.getItem('nameGroup')) {
-      inforUser['nameGroup'] = sessionStorage.getItem('nameGroup')
+      inforUser['nameGroup'] = sessionStorage.getItem('nameGroup');
+      socket.emit('joinGroup', sessionStorage.getItem('nameGroup'))
 }
 if (sessionStorage.getItem('userID')) {
       inforUser['userID'] = sessionStorage.getItem('userID')
