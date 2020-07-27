@@ -60,8 +60,8 @@ $(document).ready(function () {
         listRooms = JSON.parse(nameZoom);
         let listrooms  = Object.values(listRooms);
         if (username === 'Disconnected') {
-            delete listRooms[idConnect];
-            $('#'+idConnect).remove();
+            // delete listRooms[idConnect];
+            // $('#'+idConnect).remove();
         }
         if (listrooms.length != 0) {
           for (var key in listrooms) {
